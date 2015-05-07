@@ -4,4 +4,11 @@ SITO PER IL RECUPERO DEI DATI --> http://flowingdata.com/
 
 STRUMENTI, TOOL E API DISPONIBILI SU WEB --> http://www.ahref.eu/it/biblioteca/data-journalism-1/benchmarking-tool-e-api-disponibili-su-web.html
 
+LIBRERIE DI TWITTER PER PYTHON E ALTRI LINGUAGGI --> https://dev.twitter.com/overview/api/twitter-libraries
+
+TWITTER SEARCH LIBRARY (PROGETTO GITHUB) --> https://github.com/ckoepp/TwitterSearch
+
+TWITTER DEVELOPERS DOCUMENTATION --> https://dev.twitter.com/overview/documentation
+
+TWITTER DEVELOPERS --> https://dev.twitter.com/
 
