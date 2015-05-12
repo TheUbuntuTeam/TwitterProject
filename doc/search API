@@ -1,0 +1,15 @@
+The best way to build a query and test if it’s valid and will return matched Tweets is to first try it at twitter.com/search. As you get a satisfactory result set, the URL loaded in the browser will contain the proper query syntax that can be reused in the API endpoint. Here’s an example:   
+
+1) We want to search for tweets referencing @twitterapi account. First, we run the search on twitter.com/search
+
+2) Check and copy the URL loaded. In this case, we got: https://twitter.com/search?q=%40twitterapi  (NEL NOSTRO CASO https://twitter.com/search?q=%23python&src=tyah)
+
+3) Replace “https://twitter.com/search” with “https://api.twitter.com/1.1/search/tweets.json” and you will get: https://api.twitter.com/1.1/search/tweets.json?q=%40twitterapi
+
+4) Execute this URL to do the search in the API
+
+
+!!!Please note that now API v1.1 requires that the request must be authenticated, check Authentication & Authorization documentation for more details on how to do it. Also note that the search results at twitter.com may return historical results while the Search API usually only serves tweets from the past week.!!!
+
+
+CONTROLLATE GLI OPERATORI PER LE QUERY PER RENDERLE PIÙ SOFISTICATE E PRECISE!
