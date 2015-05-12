@@ -1,39 +1,73 @@
-from twitter import TwitterStream, UserPassAuth, Twitter
+import requests
+import base64
+import psycopg2
+import Twitter
 
-# put a file twitter-pwd.txt with your 
-# username and password in differnt lines
-with open('twitter-pwd.txt','r') as f:
-    lines = f.read().splitlines()
-    username = lines[0].strip()
-    password = lines[1].strip()
+query = "https://api.twitter.com/1.1/search/tweets.json?q=%23python -animal %3A)&src=typd"
+#localized_query = 
 
-# open stream
-twitter_stream = TwitterStream(auth=UserPassAuth(username,password))
+def get_token(client_id, client_secret):
+    credentials = '{}:{}'.format(client_id, client_secret)
+    credentials_b64 = base64.b64encode(credentials.encode())
+    resp = requests.post(
+        'https://api.twitter.com/oauth2/token',
+        headers={
+            'Authorization': 'Basic {}'.format(credentials_b64.decode())
+        },
+        data={'grant_type': 'client_credentials'}
+    )
+    if resp.status_code == 200:
+        data = resp.json()
+        return data['access_token']
+    else:
+        raise ValueError(
+            'error in request, code={} body={}'.format(
+                resp.status_code, resp.text
+            )
+        )
 
-# print stream
-for tweet in twitter_stream.statuses.sample():
-    if 'delete' in tweet: continue # skip deleted
-    print tweet['user']['screen_name']
-    print '    ', tweet['text']
-    print ''
+def search_tweets(what, token):
+	url = 'https://api.twitter.com/1.1/search/tweets.json'
+	resp = requests.get(
+	url,
+	headers = {'Authorization': 'Bearer {}'.format(token)},
+	params={'q': what, 'lang': 'it'}
+	)
+	resp.raise_for_status()
+	data = resp.json()
+	return data['statuses']
+	
+	
+#if __name__ == "main":
+#	get_token()
 
 
+def save_tweets(tweets):
+    conn = psycopg2.connect(host='localhost',
+                            port=5432,
+                            dbname='lesson_10',
+                            user='test_10',
+                            password='test_10')
+    curs = conn.cursor()
+    for tweet in tweets:
+        curs.execute(
+            'INSERT INTO tweets2 (id, date, text) VALUES (%s, %s, %s)',
+            (tweet['id'], tweet['created_at'], tweet['text'])
+        )
+    conn.commit()
+    conn.close()
 
-from twitter import TwitterStream, UserPassAuth, Twitter
 
-# put a file twitter-pwd.txt with your 
-# username and password in differnt lines
-with open('twitter-pwd.txt','r') as f:
-    lines = f.read().splitlines()
-    username = lines[0].strip()
-    password = lines[1].strip()
-
-# open stream
-twitter_stream = TwitterStream(auth=UserPassAuth(username,password))
-
-# print stream
-for tweet in twitter_stream.statuses.sample():
-    if 'delete' in tweet: continue # skip deleted
-    print tweet['user']['screen_name']
-    print '    ', tweet['text']
-    print ''
+if __name__ == '__main__':
+    import os
+    import sys
+    print('getting token...')
+    token = get_token(
+        os.environ['TWITTER_APP_ID'],
+        os.environ['TWITTER_APP_SECRET']
+    )
+    print('getting tweets...')
+    tweets = search_tweets(sys.argv[1], token)
+    print('saving tweets...')
+    save_tweets(tweets)
+    print('OK!')	
