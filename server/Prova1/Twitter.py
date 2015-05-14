@@ -5,12 +5,11 @@ import psycopg2
 
 
 def get_token(client_id, client_secret):
-		credentials = '{}:{}'.format(client_id, client_secret)
-		credentials_b64 = base64.b64encode(credentials.encode())
-    resp = requests.post('https://api.twitter.com/oauth2/token',
-        headers={
-            'Authorization': 'Basic {}'.format(credentials_b64.decode())
-        },
+    credentials = '{}:{}'.format(client_id, client_secret)
+    credentials_b64 = base64.b64encode(credentials.encode())
+    resp = requests.post(
+        'https://api.twitter.com/oauth2/token',
+        headers={'Authorization': 'Basic {}'.format(credentials_b64.decode())},
         data={'grant_type': 'client_credentials'}
     )
     if resp.status_code == 200:
