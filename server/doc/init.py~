@@ -1,10 +1,10 @@
-import requests
+# python standard library
 import base64
-import psycopg2
-import Twitter
 
-query = "https://api.twitter.com/1.1/search/tweets.json?q=%23python -animal %3A)&src=typd"
-#localized_query = 
+# 3rd party
+import requests
+import psycopg2
+
 
 def get_token(client_id, client_secret):
     credentials = '{}:{}'.format(client_id, client_secret)
@@ -26,20 +26,21 @@ def get_token(client_id, client_secret):
             )
         )
 
+
 def search_tweets(what, token):
-	url = 'https://api.twitter.com/1.1/search/tweets.json'
-	resp = requests.get(
-	url,
-	headers = {'Authorization': 'Bearer {}'.format(token)},
-	params={'q': what, 'lang': 'it'}
-	)
-	resp.raise_for_status()
-	data = resp.json()
-	return data['statuses']
-	
-	
-#if __name__ == "main":
-#	get_token()
+    '''
+    Returns:
+      a list of tweets (dictionaries)
+    '''
+    url = 'https://api.twitter.com/1.1/search/tweets.json'
+    resp = requests.get(
+        url,
+        headers={'Authorization': 'Bearer {}'.format(token)},
+        params={'q': what, 'lang': 'it'}
+    )
+    resp.raise_for_status()
+    data = resp.json()
+    return data['statuses']
 
 
 def save_tweets(tweets):
@@ -70,4 +71,5 @@ if __name__ == '__main__':
     tweets = search_tweets(sys.argv[1], token)
     print('saving tweets...')
     save_tweets(tweets)
-    print('OK!')	
+    print('OK!')
+
