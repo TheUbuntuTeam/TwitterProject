@@ -2,13 +2,13 @@
 
 import sys
 import urllib
-import request
+import urllib.request
 from requests_oauthlib import OAuth1
-from .TwitterSearchException import TwitterSearchException
-from .TwitterOrder import TwitterOrder
-from .TwitterSearchOrder import TwitterSearchOrder
-from .TwitterUserOrder import TwitterUserOrder
-from .utils import py3k
+from TwitterSearch import TwitterSearchException
+import TwitterOrder
+from TwitterSearchOrder import TwitterSearchOrder
+from TwitterUserOrder import TwitterUserOrder
+from utils import py3k
 
 
 try:
@@ -142,9 +142,9 @@ class TwitterSearch(object):
 				(e.g. ``my.proxy.com:8080``) or ``None`` is no proxy is used
 				"""
 
-	   	return self.__proxy
+		return self.__proxy
 
-		def authenticate(self, verify=True):
+	def authenticate(self, verify=True):
 			""" Creates an authenticated and internal oauth2  handler needed for \
 		queries to Twitter and verifies credentials if needed.  If ``verify`` \
 		is true, it also checks if the user credentials are valid. \
@@ -153,16 +153,16 @@ class TwitterSearch(object):
 		directly check. Default value is ``True``
 			"""
 
-		self.__oauth = OAuth1(self.__consumer_key,
-							  client_secret=self.__consumer_secret,
-							  resource_owner_key=self.__access_token,
-							  resource_owner_secret=self.__access_token_secret)
+			self.__oauth = OAuth1(self.__consumer_key,
+			client_secret=self.__consumer_secret,
+			resource_owner_key=self.__access_token,
+			resource_owner_secret=self.__access_token_secret)
 
-		if verify:
-			r = requests.get(self._base_url + self._verify_url,
-							 auth=self.__oauth,
-							 proxies={"https": self.__proxy})
-			self.check_http_status(r.status_code)
+			if verify:
+				r = requests.get(self._base_url + self._verify_url,
+				auth=self.__oauth,
+				proxies={"https": self.__proxy})
+				self.check_http_status(r.status_code)
 
 			def check_http_status(self, http_status):
 				""" Checks if given HTTP status code is within the list at \
@@ -174,8 +174,8 @@ class TwitterSearch(object):
 		:raises: TwitterSearchException
 				"""
 
-		if http_status in self.exceptions:
-			raise TwitterSearchException(http_status,
+				if http_status in self.exceptions:
+					raise TwitterSearchException(http_status,
 										 self.exceptions[http_status])
 
 			def search_tweets_iterable(self, order):
@@ -187,20 +187,20 @@ class TwitterSearch(object):
 		:returns: Itself using ``self`` keyword
 				"""
 
-		self.search_tweets(order)
-		return self
+				self.search_tweets(order)
+			return self
 
 
-		def get_minimal_id(self):
-			""" Returns the minimal tweet ID of the current response
-		:returns: minimal tweet identification number
-		:raises: TwitterSearchException
+			def get_minimal_id(self):
+				""" Returns the minimal tweet ID of the current response
+					:returns: minimal tweet identification number
+					:raises: TwitterSearchException
 			"""
 
-		if not self.__response:
-			raise TwitterSearchException(1013)
+				if not self.__response:
+					raise TwitterSearchException(1013)
 
-		return min(
+			return min(
 			self.__response['content']['statuses'] if self.__order_is_search
 			else self.__response['content'],
 			key=lambda i: i['id']
@@ -208,36 +208,36 @@ class TwitterSearch(object):
 
 
 
-		def send_search(self, url):
-			""" Queries the Twitter API with a given query string and \
-		stores the results internally. Also validates returned HTTP status \
-		code and throws an exception in case of invalid HTTP states. \
-		Example usage ``sendSearch('?q=One+Two&count=100')``
-		:param url: A string of the URL to send the query to
-		:raises: TwitterSearchException
-			"""
+			def send_search(self, url):
+				""" Queries the Twitter API with a given query string and \
+				stores the results internally. Also validates returned HTTP status \
+				code and throws an exception in case of invalid HTTP states. \
+				Example usage ``sendSearch('?q=One+Two&count=100')``
+				:param url: A string of the URL to send the query to
+				:raises: TwitterSearchException
+				"""
 
-		if not isinstance(url, str if py3k else basestring):
-			raise TwitterSearchException(1009)
+				if not isinstance(url, str if py3k else basestring):
+					raise TwitterSearchException(1009)
 
-		endpoint = self._base_url + (self._search_url
-									 if self.__order_is_search
-									 else self._user_url)
+					endpoint = self._base_url + (self._search_url
+						 if self.__order_is_search
+						 else self._user_url)
 
-		r = requests.get(endpoint + url,
-						 auth=self.__oauth,
-						 proxies={"https": self.__proxy})
+					r = requests.get(endpoint + url,
+						auth=self.__oauth,
+						proxies={"https": self.__proxy})
 
-		self.__response['meta'] = r.headers
+					self.__response['meta'] = r.headers
 
-		self.check_http_status(r.status_code)
+					self.check_http_status(r.status_code)
 
-		self.__response['content'] = r.json()
+					self.__response['content'] = r.json()
 
 		# update statistics if everything worked fine so far
-		seen_tweets = self.get_amount_of_tweets()
-		self.__statistics[0] += 1
-		self.__statistics[1] += seen_tweets
+					seen_tweets = self.get_amount_of_tweets()
+					self.__statistics[0] += 1
+					self.__statistics[1] += seen_tweets
 
 		# if we've seen the correct amount of tweets there may be some more
 		# using IDs to request more results
@@ -245,58 +245,58 @@ class TwitterSearch(object):
 		# see https://dev.twitter.com/docs/working-with-timelines
 
 		# a leading ? char does "confuse" parse_qs()
-		if url[0] == '?':	#se il primo carattere dell'url fornito è un ?
-			url = url[1:] #taglio il carattere
-		given_count = int(parse_qs(url)['count'][0])
+					if url[0] == '?':	#se il primo carattere dell'url fornito è un ?
+						url = url[1:] #taglio il carattere
+						given_count = int(parse_qs(url)['count'][0])
 
 		# Search API does have valid count values
-		if self.__order_is_search and seen_tweets == given_count:
-			self.__next_max_id = self.get_minimal_id()
+					if self.__order_is_search and seen_tweets == given_count:
+						self.__next_max_id = self.get_minimal_id()
 
 		# Timelines doesn't have valid count values
 		# see: https://dev.twitter.com/docs/faq
 		# see section: "How do I properly navigate a timeline?"
-		elif (not self.__order_is_search and
-			  len(self.__response['content']) > 0):
-			self.__next_max_id = self.get_minimal_id()
+					elif (not self.__order_is_search and
+						len(self.__response['content']) > 0):
+						self.__next_max_id = self.get_minimal_id()
 
-		else:  # we got less tweets than requested -> no more results in API
-			self.__next_max_id = None
+					else:  # we got less tweets than requested -> no more results in API
+						self.__next_max_id = None
 
-		return self.__response['meta'], self.__response['content']
+				return self.__response['meta'], self.__response['content']
 
 
-		def search_tweets(self, order):
-			""" Creates an query string through a given TwitterSearchOrder \
-		instance and takes care that it is send to the Twitter API. \
-		This method queries the Twitter API **without** iterating or \
-		reloading of further results and returns response. \
-		See `Advanced usage <advanced_usage.html>`_ for example
-		:param order: A TwitterOrder instance. \
-		Can be either TwitterSearchOrder or TwitterUserOrder
-		:returns: Unmodified response as ``dict``.
-		:raises: TwitterSearchException
-			"""
+				def search_tweets(self, order):
+					""" Creates an query string through a given TwitterSearchOrder \
+					instance and takes care that it is send to the Twitter API. \
+					This method queries the Twitter API **without** iterating or \
+					reloading of further results and returns response. \
+					See `Advanced usage <advanced_usage.html>`_ for example
+					:param order: A TwitterOrder instance. \
+					Can be either TwitterSearchOrder or TwitterUserOrder
+					:returns: Unmodified response as ``dict``.
+					:raises: TwitterSearchException
+					"""
 
-		if isinstance(order, TwitterUserOrder):
-			self.__order_is_search = False
-		elif isinstance(order, TwitterSearchOrder):
-			self.__order_is_search = True
-		else:
-			raise TwitterSearchException(1018)
+					if isinstance(order, TwitterUserOrder):
+						self.__order_is_search = False
+					elif isinstance(order, TwitterSearchOrder):
+						self.__order_is_search = True
+					else:
+						raise TwitterSearchException(1018)
 
-		self._start_url = order.create_search_url()
-		self.send_search(self._start_url)
-		return self.__response
+						self._start_url = order.create_search_url()
+						self.send_search(self._start_url)
+				return self.__response
 
-		def search_next_results(self):
-			""" Triggers the search for more results using the Twitter API. \
+	def search_next_results(self):
+		""" Triggers the search for more results using the Twitter API. \
 		Raises exception if no further results can be found. \
 		See `Advanced usage <advanced_usage.html>`_ for example
 		:returns: ``True`` if there are more results available \
 		within the Twitter Search API
 		:raises: TwitterSearchException
-			"""
+		"""
 
 		if not self.__next_max_id:
 			raise TwitterSearchException(1011)
