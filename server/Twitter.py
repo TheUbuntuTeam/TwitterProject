@@ -3,7 +3,7 @@ import base64
 import psycopg2
 import Twitter
 
-query = "https://api.twitter.com/1.1/search/tweets.json?q=%23python -animal %3A)&src=typd"
+#query = "https://api.twitter.com/1.1/search/tweets.json?q=%23python -animal %3A)&src=typd"
 #localized_query = 
 
 def get_token(client_id, client_secret):
@@ -41,33 +41,41 @@ def search_tweets(what, token):
 #if __name__ == "main":
 #	get_token()
 
-
+#~ def save_tweets(tweets):
+    #~ conn = psycopg2.connect(host='localhost',
+                            #~ port=5432,
+                            #~ dbname='twitter_database',
+                            #~ user='UbuntuTeam',
+                            #~ password='Password!')
+    #~ curs = conn.cursor()
+    #~ for tweet in tweets:
+        #~ curs.execute(
+            #~ 'INSERT INTO tweets2 (id, date, text) VALUES (%s, %s, %s)',
+            #~ (tweet['id'], tweet['created_at'], tweet['text'])
+        #~ )
+    #~ conn.commit()
+    #~ conn.close()
+    
 def save_tweets(tweets):
-    conn = psycopg2.connect(host='localhost',
-                            port=5432,
-                            dbname='lesson_10',
-                            user='test_10',
-                            password='test_10')
-    curs = conn.cursor()
-    for tweet in tweets:
-        curs.execute(
-            'INSERT INTO tweets2 (id, date, text) VALUES (%s, %s, %s)',
-            (tweet['id'], tweet['created_at'], tweet['text'])
-        )
-    conn.commit()
-    conn.close()
+	f_destination = open("tweets.txt", "w") 
+	i = 1
+	for tweet in tweets:
+		f_destination.write('{} {}'.format(i, tweet))
+		i += 1
+	f_destination.close()
 
 
 if __name__ == '__main__':
-    import os
-    import sys
-    print('getting token...')
-    token = get_token(
-        os.environ['TWITTER_APP_ID'],
+	
+	import os
+	import sys
+	print('getting token...')
+	token = get_token(
+		os.environ['TWITTER_APP_ID'],
         os.environ['TWITTER_APP_SECRET']
-    )
-    print('getting tweets...')
-    tweets = search_tweets(sys.argv[1], token)
-    print('saving tweets...')
-    save_tweets(tweets)
-    print('OK!')	
+	)
+	print('getting tweets...')
+	tweets = search_tweets(sys.argv[1], token)
+	print('saving tweets...')
+	save_tweets(tweets)
+	print('OK!')	
