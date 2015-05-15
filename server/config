@@ -1,0 +1,9 @@
+[profile its-iam-gen]
+aws_access_key_id = AKIAIYRMIGUH6GHEMTWQ
+aws_secret_access_key = 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
+region = eu-west-1
+
+[profile tsid-test]
+aws_access_key_id = AKIAJ7OY6ADCM4J7WDUA
+aws_secret_access_key = 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
+region = eu-west-1
