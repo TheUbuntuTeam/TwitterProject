@@ -39,6 +39,7 @@ def search_tweets(what, token):
 #if __name__ == "main":
 #	get_token()
 
+<<<<<<< HEAD
 #~ def save_tweets(tweets):
     #~ conn = psycopg2.connect(host='localhost',
                             #~ port=5432,
@@ -54,13 +55,30 @@ def search_tweets(what, token):
     #~ conn.commit()
     #~ conn.close()
     
+=======
+>>>>>>> 9042547529906e9dba5f0a8e3dbe9a793e03fe58
 def save_tweets(tweets):
-	f_destination = open("tweets.txt", "w") 
-	i = 1
-	for tweet in tweets:
-		f_destination.write('{} {}'.format(i, tweet))
-		i += 1
-	f_destination.close()
+    conn = psycopg2.connect(host='localhost',
+                            port=5432,
+                            dbname='twitter_db',
+                            user='UbuntuTeam',
+                            password='Password!')
+    curs = conn.cursor()
+    for tweet in tweets:
+        curs.execute(
+            'INSERT INTO tweets2 (id, date, text) VALUES (%s, %s, %s)',
+            (tweet['id'], tweet['created_at'], tweet['text'])
+        )
+    conn.commit()
+    conn.close()
+    
+#~ def save_tweets(tweets):
+	#~ f_destination = open("tweets.txt", "w") 
+	#~ i = 1
+	#~ for tweet in tweets:
+		#~ f_destination.write('{} {}'.format(i, tweet))
+		#~ i += 1
+	#~ f_destination.close()
 
 
 if __name__ == '__main__':

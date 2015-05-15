@@ -1,0 +1,21 @@
+# TwitterProject
+
+ragazzi, cappellari dice che non dobbiamo prendere i tweet passati ma di progettare il lavoro in modo da raccogliere i tweet per i prossimi 2 anni, perciò...bisogna fare una PREVISIONE sui dati futuri e non un'analisi di dati già posseduti.
+
+Per quanto riguarda la nazionalità di provenienza dei tweet, è un problema, ma non abbiamo ancora soluzione. Cerchiamo di buttare giù qualcosa che il tempo stringe 
+
+
+TODO sistemare publish.py
+
+ Traceback (most recent call last):
+  File "publish.py", line 9, in <module>
+    s3.create_bucket(Bucket='extract_script')
+  File "/home/marco/project_work/TwitterProject/server/virtual/lib/python3.2/site-packages/botocore/client.py", line 200, in _api_call
+    return self._make_api_call(operation_name, kwargs)
+  File "/home/marco/project_work/TwitterProject/server/virtual/lib/python3.2/site-packages/botocore/client.py", line 255, in _make_api_call
+    raise ClientError(parsed_response, operation_name)
+botocore.exceptions.ClientError: An error occurred (InvalidAccessKeyId) when calling the CreateBucket operation: The AWS Access Key Id you provided does not exist in our records.
+
+TODO sistemare database
+TODO pulire tweet in entrata
+
