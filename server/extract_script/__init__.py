@@ -1,7 +1,7 @@
 import requests
 import base64
 import psycopg2
-import Twitter
+#import Twitter
 
 #query = "https://api.twitter.com/1.1/search/tweets.json?q=%23python -animal %3A)&src=typd"
 #localized_query = 
@@ -41,28 +41,28 @@ def search_tweets(what, token):
 #if __name__ == "main":
 #	get_token()
 
-#~ def save_tweets(tweets):
-    #~ conn = psycopg2.connect(host='localhost',
-                            #~ port=5432,
-                            #~ dbname='twitter_database',
-                            #~ user='UbuntuTeam',
-                            #~ password='Password!')
-    #~ curs = conn.cursor()
-    #~ for tweet in tweets:
-        #~ curs.execute(
-            #~ 'INSERT INTO tweets2 (id, date, text) VALUES (%s, %s, %s)',
-            #~ (tweet['id'], tweet['created_at'], tweet['text'])
-        #~ )
-    #~ conn.commit()
-    #~ conn.close()
-    
 def save_tweets(tweets):
-	f_destination = open("tweets.txt", "w") 
-	i = 1
-	for tweet in tweets:
-		f_destination.write('{} {}'.format(i, tweet))
-		i += 1
-	f_destination.close()
+    conn = psycopg2.connect(host='localhost',
+                            port=5432,
+                            dbname='twitter_db',
+                            user='UbuntuTeam',
+                            password='Password!')
+    curs = conn.cursor()
+    for tweet in tweets:
+        curs.execute(
+            'INSERT INTO tweets2 (id, date, text) VALUES (%s, %s, %s)',
+            (tweet['id'], tweet['created_at'], tweet['text'])
+        )
+    conn.commit()
+    conn.close()
+    
+#~ def save_tweets(tweets):
+	#~ f_destination = open("tweets.txt", "w") 
+	#~ i = 1
+	#~ for tweet in tweets:
+		#~ f_destination.write('{} {}'.format(i, tweet))
+		#~ i += 1
+	#~ f_destination.close()
 
 
 if __name__ == '__main__':

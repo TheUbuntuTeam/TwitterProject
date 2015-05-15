@@ -12,7 +12,7 @@ to build the package do:
 
     python setup.py sdist
 
-You can find your package archive in `dist/twitter_example-XXXX.tar.gz`
+You can find your package archive in `dist/extract_script-0.1.tar.gz`
 
 
 ## Publish
