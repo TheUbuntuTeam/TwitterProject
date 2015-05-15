@@ -39,7 +39,7 @@ def search_tweets(what, token):
 #if __name__ == "main":
 #	get_token()
 
-<<<<<<< HEAD
+
 #~ def save_tweets(tweets):
     #~ conn = psycopg2.connect(host='localhost',
                             #~ port=5432,
@@ -54,9 +54,7 @@ def search_tweets(what, token):
         #~ )
     #~ conn.commit()
     #~ conn.close()
-    
-=======
->>>>>>> 9042547529906e9dba5f0a8e3dbe9a793e03fe58
+ 
 def save_tweets(tweets):
     conn = psycopg2.connect(host='localhost',
                             port=5432,
