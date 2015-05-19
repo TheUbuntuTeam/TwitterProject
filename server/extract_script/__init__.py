@@ -77,20 +77,32 @@ def save_tweets(tweets):
 		#~ f_destination.write('{} {}'.format(i, tweet))
 		#~ i += 1
 	#~ f_destination.close()
+    
+def save_cleared_tweets(tweets):
+    f_destination = open("tweetsCL.txt", "w")
+    i = 1
+    for tweet in tweets:
+        try:
+            str = '{} {} {} {}'.format(i, tweet['id'], tweet['text'], tweet['retweet_count'])
+            f_destination.write(str + '\n')
+            i += 1
+        except UnicodeEncodeError:
+            pass
+    f_destination.close()
 
 
-#if __name__ == '__main__':
+if __name__ == '__main__':
 	
-#	import os
-#	import sys
-#	print('getting token...')
-#	token = get_token(
-#		os.environ['TWITTER_APP_ID'],
- #       os.environ['TWITTER_APP_SECRET']
-#	)
-#	print('getting tweets...')
-#	tweets = search_tweets(sys.argv[1], token)
-#	print('saving tweets...')
-#	save_tweets(tweets)
-#	print('OK!')	
-#
+    import os
+    import sys
+    print('getting token...')
+    token = get_token(
+        os.environ['TWITTER_APP_ID'],
+        os.environ['TWITTER_APP_SECRET'])
+    print('getting tweets...')
+    tweets = search_tweets(sys.argv[1], token)
+    print('saving tweets...')
+    save_tweets(tweets)
+    print('OK!')
+    save_cleared_tweets(tweets)
+    print('clearing ok')
