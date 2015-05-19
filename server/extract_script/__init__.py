@@ -21,9 +21,7 @@ def get_token(client_id, client_secret):
         return data['access_token']
     else:
         raise ValueError(
-            'error in request, code={} body={}'.format(
-                resp.status_code, resp.text
-            )
+            'error in request, code={} body={}'.format(resp.status_code, resp.text)
         )
 
 def search_tweets(what, token):
@@ -38,6 +36,7 @@ def search_tweets(what, token):
 	return data['statuses']
 	
 	
+<<<<<<< HEAD
 #~ def save_tweets(tweets):
     #~ conn = psycopg2.connect(host='localhost',
                             #~ port=5432,
@@ -60,19 +59,75 @@ def save_tweets(tweets):
 		f_destination.write('{} {}'.format(i, tweet))
 		i += 1
 	f_destination.close()
+=======
+#if __name__ == "main":
+#	get_token()
+
+
+#~ def save_tweets(tweets):
+    #~ conn = psycopg2.connect(host='localhost',
+                            #~ port=5432,
+                            #~ dbname='twitter_db',
+                            #~ user='UbuntuTeam',
+                            #~ password='Password!')
+    #~ curs = conn.cursor()
+    #~ for tweet in tweets:
+        #~ curs.execute(
+            #~ 'INSERT INTO tweets2 (id, date, text) VALUES (%s, %s, %s)',
+            #~ (tweet['id'], tweet['created_at'], tweet['text'])
+        #~ )
+    #~ conn.commit()
+    #~ conn.close()
+ 
+def save_tweets(tweets):
+    conn = psycopg2.connect(host='localhost',
+                            port=5432,
+                            dbname='twitter_db',
+                            user='UbuntuTeam',
+                            password='Password!')
+    curs = conn.cursor()
+    for tweet in tweets:
+        curs.execute(
+            'INSERT INTO tweets2 (id, date, text) VALUES (%s, %s, %s)',
+            (tweet['id'], tweet['created_at'], tweet['text'])
+        )
+    conn.commit()
+    conn.close()
+    
+#~ def save_tweets(tweets):
+	#~ f_destination = open("tweets.txt", "w") 
+	#~ i = 1
+	#~ for tweet in tweets:
+		#~ f_destination.write('{} {}'.format(i, tweet))
+		#~ i += 1
+	#~ f_destination.close()
+    
+def save_cleared_tweets(tweets):
+    f_destination = open("tweetsCL.txt", "w")
+    i = 1
+    for tweet in tweets:
+        try:
+            str = '{} {} {} {}'.format(i, tweet['id'], tweet['text'], tweet['retweet_count'])
+            f_destination.write(str + '\n')
+            i += 1
+        except UnicodeEncodeError:
+            pass
+    f_destination.close()
+>>>>>>> 9c4745b2671c1054863c623856d13a1a08b3364e
 
 
 if __name__ == '__main__':
 	
-	import os
-	import sys
-	print('getting token...')
-	token = get_token(
-		os.environ['TWITTER_APP_ID'],
-        os.environ['TWITTER_APP_SECRET']
-	)
-	print('getting tweets...')
-	tweets = search_tweets(sys.argv[1], token)
-	print('saving tweets...')
-	save_tweets(tweets)
-	print('OK!')	
+    import os
+    import sys
+    print('getting token...')
+    token = get_token(
+        os.environ['TWITTER_APP_ID'],
+        os.environ['TWITTER_APP_SECRET'])
+    print('getting tweets...')
+    tweets = search_tweets(sys.argv[1], token)
+    print('saving tweets...')
+    save_tweets(tweets)
+    print('OK!')
+    save_cleared_tweets(tweets)
+    print('clearing ok')
