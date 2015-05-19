@@ -17,5 +17,5 @@ TODO sistemare publish.py
 botocore.exceptions.ClientError: An error occurred (InvalidAccessKeyId) when calling the CreateBucket operation: The AWS Access Key Id you provided does not exist in our records.
 
 TODO sistemare database
-TODO pulire tweet in entrata
+TODO controllare campo dei tweet in entrata
 
