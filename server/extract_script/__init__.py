@@ -79,17 +79,18 @@ def save_tweets(tweets):
 	#~ f_destination.close()
 
 
-if __name__ == '__main__':
+#if __name__ == '__main__':
 	
-	import os
-	import sys
-	print('getting token...')
-	token = get_token(
-		os.environ['TWITTER_APP_ID'],
-        os.environ['TWITTER_APP_SECRET']
-	)
-	print('getting tweets...')
-	tweets = search_tweets(sys.argv[1], token)
-	print('saving tweets...')
-	save_tweets(tweets)
-	print('OK!')	
+#	import os
+#	import sys
+#	print('getting token...')
+#	token = get_token(
+#		os.environ['TWITTER_APP_ID'],
+ #       os.environ['TWITTER_APP_SECRET']
+#	)
+#	print('getting tweets...')
+#	tweets = search_tweets(sys.argv[1], token)
+#	print('saving tweets...')
+#	save_tweets(tweets)
+#	print('OK!')	
+#
