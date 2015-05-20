@@ -3,8 +3,7 @@ import base64
 import psycopg2
 #import Twitter
 
-#query = "https://api.twitter.com/1.1/search/tweets.json?q=%23python -animal %3A)&src=typd"
-#localized_query = 
+
 
 def get_token(client_id, client_secret):
     credentials = '{}:{}'.format(client_id, client_secret)
@@ -36,7 +35,7 @@ def search_tweets(what, token):
 	return data['statuses']
 	
 	
-<<<<<<< HEAD
+HEAD
 #~ def save_tweets(tweets):
     #~ conn = psycopg2.connect(host='localhost',
                             #~ port=5432,
