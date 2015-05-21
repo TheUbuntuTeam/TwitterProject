@@ -4,53 +4,63 @@ from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
 from tweepy import API
-
-
-api = tweepy.API(auth)
+import json
 
 #get credentials' file (change it with your path)
-credentials = open('/home/marco/project_work/TwitterProject/.credentials', 'r')
+# !!! DO NOT PUBLISH YOUR PRIVATE KEYS ONLINE !!!
+credentials = open('/home/marco/Documenti/.credentials', 'r')
 
 #get and split the credentials
-def readerCredentials():
+def getCredentials():
 	for line in credentials.read().splitlines():
 		yield line 
 
 #the credentials file must be in order: consumer_key, consumer_secret, access_token, access_token_secret
-key = readerCredentials()
+key = getCredentials()
 consumer_key = key.__next__()
 consumer_secret = key.__next__()
 access_token = key.__next__();
 access_token_secret = key.__next__()
 credentials.close()
 
-class StdOutListener(tweepy.StreamListener):
+#authentication
+auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+auth.set_access_token(access_token, access_token_secret)
+#define the api
+api = tweepy.API(auth)
+
+#call the class listener
+class MyStreamListener(tweepy.StreamListener):
+	
+	def on_status(self, status):
+		print(status.text)
+		
 	def on_data(self, data):
 		# Twitter returns data in JSON format - we need to decode it first
 		decoded = json.loads(data)
-
-		# Also, we convert UTF-8 to ASCII ignoring all bad characters sent by users
+		#convert UTF-8 to ASCII ignoring all bad characters sent by users
 		print ('@%s: %s' % (decoded['user']['screen_name'], decoded['text'].encode('ascii', 'ignore')))
 		print ('')
 		return True
 
-	def on_error(self, status):
-		print (status)
+	def on_error(self, status_code):
+		if status_code == 420:
+			#returning False in on_data disconnects the stream
+			return False
         
-        
+
+def get_tweets():
+	stream = Stream(auth, MyStreamListener())
+	result = stream.filter(track=["PYTHON -animal" or "JAVA" or "PHP" or "JAVASCRIPT" or "RUBY" or "COBOL" or "C" or "C#" or "OBJECTIVE C" or "C++" or "ASSEMBLY" or "PERL" or "SCALA" or "GO" or "VISUALBASIC"])
+
+def save_tweets():
+	d_file = "tweets.txt"
+	for line in result:
+		with open(d_file, 'a+') as out:
+			out.write(result)
+			out.close
+		
+#main
 if __name__ == '__main__':
-	listener = StdOutListener()
-	#authentication
-	auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-	auth.set_access_token(access_token, access_token_secret)
-	
-	print ("Showing all new tweets for the most famous programming language...")
-
-	stream = tweepy.Stream(auth, listener)
-	searched = stream.filter(track=['python -animal' or 'java' or 'go' or 'scala' or 'javascript' or 'php' or 'ruby' or 'cobol' or 'C' or 'C#' or 'Objective C' or 'C++' or 'perl' or 'visualbasic'])
-
-for line in searched:
-	new_file = "searched_tweets.txt"
-	with open(new_file, 'w') as out:
-		out.write(search_result.split())
-		out.close()
+	result = get_tweets()
+	save_tweets()
