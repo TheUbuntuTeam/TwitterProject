@@ -3,7 +3,7 @@ from tweepy import OAuthHandler
 from tweepy import Stream
 
 #change the path when you have stored the credentials
-credentials = open('/home/marco/project_work/TwitterProject/.credentials', 'r')
+#TODO credentials = open('/home/marco/project_work/TwitterProject/.credentials', 'r')
 
 def reader():
 	for line in credentials.read().splitlines():
