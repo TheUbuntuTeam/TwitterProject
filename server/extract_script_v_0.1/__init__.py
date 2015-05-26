@@ -6,10 +6,10 @@ from tweepy import OAuthHandler
 from tweepy import API
 
 
-api = tweepy.API(auth)
+
 
 #get credentials' file (change it with your path)
-credentials = open('/home/marco/project_work/TwitterProject/.credentials', 'r')
+credentials = open('/users/MICHELE/project_work/TwitterProject/.credentials', 'r')
 
 #get and split the credentials
 def readerCredentials():
@@ -27,10 +27,10 @@ credentials.close()
 #authentication
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
-
+api = tweepy.API(auth)
 #here search for the specified query
 query = 'python -animal'
-searched_tweets = [status for status in tweepy.Cursor(api.search, q=query)
+#searched_tweets = [status for status in tweepy.Cursor(api.search, q=query)]
 
 for tweet in tweepy.Cursor(api.search, q=query, lang="en").items():
 	print(tweet.text)
