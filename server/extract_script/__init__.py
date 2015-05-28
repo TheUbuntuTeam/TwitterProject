@@ -3,12 +3,10 @@ import base64
 import psycopg2
 #import Twitter
 
-<<<<<<< HEAD
+
 #query=https://api.twitter.com/1.1/search/tweets.json?q=%23python -animal %3A)&src=typd"
 #localized_query = 
-=======
 
->>>>>>> 1cb8f4ccbf35ac616fa83094a2e48a2c3c80acdd
 
 def get_token(client_id, client_secret):
     credentials = '{}:{}'.format(client_id, client_secret)
@@ -63,7 +61,7 @@ def save_tweets(tweets):
 		f_destination.write('{} {}'.format(i, tweet))
 		i += 1
 	f_destination.close()
-=======
+
 #if __name__ == "main":
 #	get_token()
 
@@ -117,12 +115,10 @@ def save_cleared_tweets(tweets):
         except UnicodeEncodeError:
             pass
     f_destination.close()
->>>>>>> 9c4745b2671c1054863c623856d13a1a08b3364e
-
 
 if __name__ == '__main__':
 	
-<<<<<<< HEAD
+
 	import os
 	import sys
 	print('getting token...')
@@ -136,7 +132,7 @@ if __name__ == '__main__':
 	#save_tweets(tweets)
 	print(tweets)	
  
-=======
+
     import os
     import sys
     print('getting token...')
@@ -150,4 +146,3 @@ if __name__ == '__main__':
     print('OK!')
     save_cleared_tweets(tweets)
     print('clearing ok')
->>>>>>> 1cb8f4ccbf35ac616fa83094a2e48a2c3c80acdd
