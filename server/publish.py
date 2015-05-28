@@ -2,6 +2,8 @@ import shutil
 import glob
 import os.path
 import botocore.session
+import boto
+import boto.s3.connection
 
 session = botocore.session.Session(session_vars={'profile': (None, None, 'tsid-test')})
 s3 = session.create_client('s3', region_name='eu-west-1')
