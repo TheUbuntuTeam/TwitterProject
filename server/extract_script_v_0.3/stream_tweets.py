@@ -23,33 +23,38 @@ access_token_secret = key.__next__()
 credentials.close()
  
 start_time = time.time() #grabs the system time
-keyword_list = ["PYTHON" , "JAVA" , "PHP" , "JAVASCRIPT" , "RUBY" , "COBOL" , "C" , "C#" , "OBJECTIVE C" , "C++" , "ASSEMBLY" , "PERL" , "SCALA" , "VISUALBASIC"] #track list
+keyword_list = ["PYTHON" , "JAVA" , "JAVASCRIPT" , "RUBY" , "COBOL" , "C#" , "OBJECTIVE C" , "C++" , "ASSEMBLY" , "PERL" , "SCALA" , "VISUALBASIC"] #track list
 
 class listener(StreamListener):
  
 	def on_data(self, data):
  
-		while True:
+		#while True:
+		saveFile = open('log.txt', 'a')
+		decoded = json.loads(data)
+		try:
+			msg = ('%s$ %s$ %s' % (decoded['user']['time_zone'],decoded['user']['location'],decoded['text']))
+			#msg = ('LOCATION: %s TIME_ZONE: %s TWEET_MESSAGE: %s ' % (decoded['user']['location'].encode('ascii', 'ignore'),decoded['user']['time_zone'], decoded['text'].encode('ascii', 'ignore')))
+			#msg_no_encode = ('USER: @%s --> LOCATION: %s TWEET_MESSAGE: %s' % (decoded['user']['screen_name'], decoded['user']['location'], decoded['text']))
+			print(msg) 
+			#print(msg_no_encode)
+			print("\n")
+			saveFile.write(msg)
+			saveFile.write('\n')
+			saveFile.close()
+
+			return True
+				
+		except UnicodeEncodeError:
+			return False
+
+
+		except BaseException as e:
+			print('failed ondata,', str(e))
+			time.sleep(5)
+			return True
  
-			try:
-				decoded = json.loads(data)
-				msg = ('@%s: %s' % (decoded['user']['screen_name'], decoded['text'].encode('ascii', 'ignore')))
-				print(msg)
-				print("\n")
-				saveFile = open('log.json', 'a')
-				saveFile.write(msg)
-				saveFile.write('\n')
-				saveFile.close()
- 
-				return True
- 
- 
-			except BaseException as e:
-				print('failed ondata,', str(e))
-				time.sleep(3)
-				continue
- 
-		exit()
+		#exit()
  
 	def on_error(self, status):
  
@@ -58,6 +63,16 @@ class listener(StreamListener):
 #OAuth object
 auth = OAuthHandler(consumer_key, consumer_secret) 
 auth.set_access_token(access_token, access_token_secret)
- 
-twitterStream = Stream(auth, listener(start_time)) #initialize Stream object with a time out limit
-twitterStream.filter(track=keyword_list, languages=['en'])  #call the filter method to run the Stream Object
+
+
+def start_stream(): 
+	while True:
+		try:
+			twitterStream = Stream(auth, listener(start_time)) #initialize Stream object with a time out limit
+			twitterStream.filter(track=keyword_list)  #call the filter method to run the Stream Object
+		except:
+			continue
+#~ 
+if __name__ == "__main__":
+
+	start_stream()

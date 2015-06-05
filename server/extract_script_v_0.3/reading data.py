@@ -3,7 +3,7 @@ import panda
 import matplotlib.pyplot as plt
 
 #twitter data path
-tweets_data_path = '~/project_work/TwitterProject/server/extract_script_v_0.3/log.json'
+tweets_data_path = '~/project_work/TwitterProject/server/extract_script_v_0.3/log.txt'
 
 #create an array and fill it with data
 tweets_data = []
@@ -21,6 +21,6 @@ print(len(tweets_data))
 #structure the tweets data into a pandas DataFrame
 tweets = panda.DataFrame()
 
-tweets['user' = map(lampda tweet: tweet['user'], tweets_data)
+tweets['location' = map(lampda tweet: tweet['user']['location'], tweets_data)
 tweets['text' = map(lampda tweet: tweet['text'], tweets_data)
 

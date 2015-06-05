@@ -1,7 +1,0 @@
-[watcher:get_tweets]
-cmd = python
-args = 
-warmup_delay = 15
-logoutput =
-virtualenv = virtual
-copy_env = True
